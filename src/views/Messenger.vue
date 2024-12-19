@@ -15,14 +15,20 @@
       <div class="main-content">
         <FriendsList
           @change-tab="changeTab"
+          @open-chatroom="handleChangeTab"
           v-if="activeTab === 'friends'"
           :friends="friends"
         />
         <ChatRoomsList
           @change-tab="changeTab"
-          v-if="activeTab === 'chatRooms'"
+          v-if="activeTab === 'chatRoomList'"
           :chatRooms="chatRooms"
         />
+        <ChatRoom
+          @open-chatroom="changeTab"
+          v-if="activeTab === 'chatRoom'"
+          :chatRooms="chatRooms"
+          :room-id="roomId"/>
       </div>
     </div>
   </div>
@@ -32,10 +38,12 @@
 import Sidebar from "@/components/Sidebar.vue";
 import FriendsList from "@/components/FriendsList.vue";
 import ChatRoomsList from "@/components/ChatRoomsList.vue";
+import ChatRoom from "@/components/ChatRoom.vue"
 
 export default {
   name: "Messenger",
   components: {
+    ChatRoom,
     Sidebar,
     FriendsList,
     ChatRoomsList,
@@ -45,11 +53,18 @@ export default {
       activeTab: "friends", // 현재 활성화된 탭
       friends: [],
       chatRooms: [],
+      roomId: "",
     };
   },
   methods: {
     changeTab(tab) {
       this.activeTab = tab;
+    },
+    handleChangeTab(tabName, roomId) {
+      this.activeTab = tabName; // 탭 변경
+      if (roomId) {
+        this.roomId = roomId; // 현재 활성화된 채팅방 ID 저장
+      }
     },
   },
 };

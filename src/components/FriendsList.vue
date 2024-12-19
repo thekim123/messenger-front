@@ -50,7 +50,6 @@ export default {
       try {
         const response = await api.get("/api/friend/list/all");
         this.friendships = response.data;
-        console.log(response);
       } catch (err) {
         this.error = "친구 목록을 불러오는 데 실패했습니다.";
         console.error(err);
@@ -61,28 +60,25 @@ export default {
     async goToChat(userId) {
       // 서버에서 채팅방 아이디를 받아온다.
       const chatroomData = await this.fetchPrivateChatRoom(userId);
-      console.log(chatroomData)
       // 화면을 채팅방으로 이동시킨다.
-      this.$emit("change-tab", "chatRooms"); // 부모에게 탭 변경 요청
+      this.$emit("open-chatroom", "chatRoom", chatroomData); // 부모에게 탭 변경 요청
     },
     async fetchPrivateChatRoom(userId) {
       try {
         const response = await api.get(`/api/chat/private/${userId}`);
         if (response.status === 204) {
           const newResponse = await this.makePrivateChatRoom(userId);
-          return newResponse.data;
+          return newResponse.data.roomName;
         }
 
         if (response.status !== 200) {
           alert('알 수 없는 에러 발생');
         }
-        console.log(response.data);
-        return response.data;
+        return response.data.roomName;
       } catch (err) {
         this.error = "대기 목록을 불러오는 데 실패했습니다.";
         console.error(err);
       } finally {
-        console.log('1:1 채팅방 가져오기 완료');
       }
     },
     async makePrivateChatRoom(userId) {
