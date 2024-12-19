@@ -2,19 +2,24 @@
   <div class="messenger-container">
     <!-- 헤더 -->
     <header class="header">
+      <!--       TODO: 사용자이름 출력하는 기능 만들기-->
+      <!--       jwt에서 바로 유저네임 가져오기 가능? - 암호키를 가지고 있어야해서 안될거같은데-->
+      <!--       안되면 서버에서 조회....-->
       <h1>메신저</h1>
     </header>
 
     <div class="content-wrapper">
       <!-- 왼쪽 사이드바 -->
-      <Sidebar @select-tab="changeTab" />
+      <Sidebar @select-tab="changeTab"/>
       <!-- 메인 컨텐츠 -->
       <div class="main-content">
         <FriendsList
+          @change-tab="changeTab"
           v-if="activeTab === 'friends'"
           :friends="friends"
         />
         <ChatRoomsList
+          @change-tab="changeTab"
           v-if="activeTab === 'chatRooms'"
           :chatRooms="chatRooms"
         />
@@ -38,16 +43,8 @@ export default {
   data() {
     return {
       activeTab: "friends", // 현재 활성화된 탭
-      friends: [
-        { id: 1, name: "친구 1" },
-        { id: 2, name: "친구 2" },
-        { id: 3, name: "친구 3" },
-      ],
-      chatRooms: [
-        { id: 1, name: "채팅방 1" },
-        { id: 2, name: "채팅방 2" },
-        { id: 3, name: "채팅방 3" },
-      ],
+      friends: [],
+      chatRooms: [],
     };
   },
   methods: {

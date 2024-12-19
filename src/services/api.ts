@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const baseURL = 'http://localhost:8080';
+const tokenPrefix = 'Bearer ';
 const api = axios.create({
   baseURL: 'http://localhost:8080', // 백엔드 URL
   withCredentials: true,
@@ -27,20 +29,24 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const response = await axios.post('http://localhost:8080/auth/refresh', {
-          refreshToken,
+        const sendRefreshToken = tokenPrefix+refreshToken;
+        const response = await axios.post(`${baseURL}/auth/refresh`, {
+          sendRefreshToken: sendRefreshToken,
         });
         const newAccessToken = response.data.accessToken;
+        const newRefreshToken = response.data.refreshToken;
 
         // 새 액세스 토큰 저장
+        console.log('save new token: ' + newAccessToken);
         localStorage.setItem('accessToken', newAccessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return axios(originalRequest);
       } catch (err) {
         console.error('Refresh token expired or invalid');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        // localStorage.removeItem('accessToken');
+        // localStorage.removeItem('refreshToken');
         window.location.href = '/login'; // 로그인 페이지로 리다이렉트
       }
     }

@@ -1,5 +1,5 @@
 자바스크립트 버전바꾸기
-```
+```sh
 fnm env --use-on-cd | Out-String | Invoke-Expression
 ```
 

@@ -6,9 +6,9 @@
       <div v-else-if="error">{{ error }}</div>
       <ul v-else>
         <li v-for="request in pendingList" :key="request.id">
-          {{ request.friend.username }}
-          <button @click="acceptFriend(request.friend.username)">수락</button>
-          <button @click="rejectFriend(request.friend.username)">거절</button>
+          {{ request.user.username }}
+          <button @click="acceptFriend(request.user.username)">수락</button>
+          <button @click="rejectFriend(request.user.username)">거절</button>
         </li>
       </ul>
       <div class="modal-actions">
